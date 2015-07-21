@@ -14,6 +14,8 @@ relations.define('study', {
     ]
 });
 
+relations.study('dylan is PI of 367');
+
 const knex = require('knex')({
     client: 'pg',
     connection: {
@@ -26,8 +28,6 @@ const knex = require('knex')({
     }
 });
 
-console.log(fs.readFileSync('/coins/keys/node_api_pwd').toString().trim());
-
 const bookshelf = require('bookshelf')(knex);
 
 const Study = bookshelf.Model.extend({tableName: 'mrs_studies'});
@@ -36,12 +36,11 @@ const config = [
     {
         defaults: {
             modelName: 'Study',
-            authKey: 'id',
+            authKey: 'study_id',
             aclContextName: 'study'
-        },
-        //optional action-specific configs here
+        }
     }
-]
+];
 
 shield({
     config: config,
@@ -49,4 +48,10 @@ shield({
     acl: relations
 });
 
-//new Study({pi_id: 'KKIEHL'}).fetchAll().then(console.dir);
+const user = {username: 'dylan'};
+
+const dylanStudy = new Study({study_id: 367});
+const runtangStudy = new Study({study_id: 347});
+
+//dylanStudy.read(user).then(console.log).catch(console.error);
+runtangStudy.read(user).then(console.log).catch(console.error);
